@@ -86,7 +86,7 @@ Este proyecto utiliza Playwright y Cucumber para automatizar el proceso de creac
     ```env
     BROWSER=chromium
     HEADLESS=false
-    BASE_URL=https://opensource-demo.orangehrmlive.com/auth/login
+    BASE_URL=https://opensource-demo.orangehrmlive.com/web/index.php/auth/login
     ```
 
 ## Ejecución de las Pruebas
