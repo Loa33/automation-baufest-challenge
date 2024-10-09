@@ -268,6 +268,7 @@ export class EmployeePage {
     }
 
     async fillEmployeePersonalDetails(details: PersonalDetails) {
+            await this.waitForLoader();
             await this.page.waitForSelector(this.personalDetailsTitle, { state: 'visible', timeout: 10000 });
             await this.otherIdInput.fill(details.otherId);
             await this.driverLicenseInput.fill(details.driverLicenseNumber);
@@ -288,8 +289,12 @@ export class EmployeePage {
     }
 
     async fillEmployeeContactDetails(details: ContactDetails) {
+        await this.waitForLoader();
+        if (!details || !details.street1) {
+            console.error('Los detalles de contacto están incompletos o son inválidos:', details);
+            return; // Detener la ejecución si los detalles no son válidos
+        }
         await this.contactDetailsLink.click();
-        await this.page.waitForSelector(this.contactDetailsTitle, { state: 'visible', timeout: 10000  });
         await this.street1Input.fill(details.street1);
         await this.street2Input.fill(details.street2);
         await this.cityInput.fill(details.city);
@@ -306,6 +311,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeEmergencyContacts(name: string, relationship: string, homeTelephone: string, mobile:string, workTelephone: string) {
+        await this.waitForLoader();
         await this.emergencyContactsLink.click();
         await this.addEmergencyContactButton.click();
         await this.nameInput.fill(name);
@@ -317,6 +323,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeDependents(name: string, relationship: string, homeTelephone: string, dateOfBirth: string) {
+        await this.waitForLoader();
         await this.dependentsLink.click();
         await this.addDependentsButton.click();
         await this.nameInput.fill(name);
@@ -329,6 +336,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeImmigration(number: string, issueDate: string, expiryDate: string, eligibleStatus: string, issuedBy: string, eligibleReviewDate: string){
+        await this.waitForLoader();
         await this.immigrationLink.click();
         await this.addImmigrationButton.click();
         await this.numberImmigrationInput.fill(number);
@@ -343,6 +351,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeJob(joinedDate: string, jobTitle: string, jobCategory: string, subUnit: string, location: string, employmentStatus: string) {
+        await this.waitForLoader();
         await this.jobLink.click();
         await this.joinedDateInput.fill(joinedDate);
         await this.jobTitleSelect.click();
@@ -364,6 +373,7 @@ export class EmployeePage {
     }
     
     async fillEmployeeSalary(salaryComponent: string, payGrade: string, payFrequency: string, currency: string, amount: string) {
+        await this.waitForLoader();
         await this.salaryLink.click();
         await this.addSalaryButton.click();
         await this.salaryComponentInput.fill(salaryComponent);
@@ -381,6 +391,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeReportTo(reportingMethod: string) {
+        await this.waitForLoader();
         await this.reportToLink.click();
         await this.addSupervisorButton.click();
         await this.nameSupervisorInput.click();
@@ -394,6 +405,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeQualifications(details: Qualifications) {
+        await this.waitForLoader();
         await this.qualificationLink.click();
         await this.addWorkExperienceButton.click();
         await this.companyWorkExperienceInput.fill(details.company);
@@ -427,6 +439,7 @@ export class EmployeePage {
     }
 
     async fillEmployeeMemberships(membership: string, subscriptionPaidBy: string, currency: string) {
+        await this.waitForLoader();
         await this.membershipsLink.click();
         await this.addMembershipsButton.click();
         await this.membershipSelect.click();
@@ -447,9 +460,13 @@ export class EmployeePage {
                 await button.click();
             }
 
-            await this.page.waitForSelector('//div[contains(@class, "loader")]', { state: 'detached' , timeout: 30000 });
+            await this.waitForLoader();
             await this.page.mouse.wheel(0, -100000000)
         } 
+
+    async waitForLoader() {
+        await this.page.waitForSelector('//div[contains(@class, "loader")]', { state: 'detached' , timeout: 50000 });
+    }
 
     async verifySuccesfulCreation() {
             await this.employeeListLink.click();
